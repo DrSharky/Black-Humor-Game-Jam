@@ -12,7 +12,6 @@ public class WanderingAI : MonoBehaviour
     public GameObject player;
 
     private float timer;
-    private bool chasing = false;
     private bool frozen = false;
     private bool endState = false;
     private NavMeshAgent agent;
@@ -92,10 +91,6 @@ public class WanderingAI : MonoBehaviour
             timer = 0;
 
         }
-        //else if (chasing && !sunglassesActive)
-        //{
-        //    agent.SetDestination(player.transform.position - ((player.transform.position - transform.position).normalized*2));
-        //}
 
         if (agent.remainingDistance > agent.stoppingDistance)
             Move(agent.desiredVelocity);
@@ -118,10 +113,7 @@ public class WanderingAI : MonoBehaviour
         move = transform.InverseTransformDirection(move);
         move = Vector3.ProjectOnPlane(move, m_GroundNormal);
         turnAmt = Mathf.Atan2(move.x, move.z);
-        //if (chasing && !sunglassesActive)
-        //    forwardAmt = move.z;
-        //else
-        //    forwardAmt = move.z * 0.5f;
+
         forwardAmt = move.z * 0.5f;
 
         ApplyExtraTurnRotation();
@@ -138,7 +130,7 @@ public class WanderingAI : MonoBehaviour
         transform.Rotate(0, turnAmt * turnSpeed * Time.deltaTime, 0);
     }
 
-    public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
+    private Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
     {
         Vector3 randDirection = UnityEngine.Random.insideUnitSphere * dist;
         randDirection += origin;
@@ -148,24 +140,8 @@ public class WanderingAI : MonoBehaviour
         return navHit.position;
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.tag == "Player")
-    //    {
-    //        chasing = true;
-    //        EventManager.TriggerEvent("chase" + gameObject.GetInstanceID());
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.tag == "Player")
-    //        chasing = false;
-    //}
-
     public void PlayerIsDead()
     {
-        chasing = false;
         endState = true;
     }
 

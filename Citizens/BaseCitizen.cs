@@ -11,6 +11,8 @@ public class BaseCitizen : MonoBehaviour
     private GameObject player;
     [SerializeField]
     private NavMeshAgent agent;
+    [SerializeField]
+    private GameObject cultCostume;
 
     private bool lookAtPlayer = false;
     private bool recruiting = false;
@@ -51,15 +53,24 @@ public class BaseCitizen : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, newRot, 7.0f);
             if(recruiting)
             {
-                recruitNum = recruitNum + recruitSpeed * Time.deltaTime;
+                recruitNum = recruitNum + (recruitSpeed * Recruit.recruitMultiplier) * Time.deltaTime;
                 recruitText.text = Mathf.Round(recruitNum) + "%";
             }
             if(recruitNum >= 100.0f)
             {
-                EventManager.TriggerEvent("Convert" + gameObject.GetInstanceID());
+                ChangeCostume();
+                EventManager.TriggerEvent("AddRecruit");
+                lookAtPlayer = false;
             }
         }
 	}
+
+    void ChangeCostume()
+    {
+        cultCostume.SetActive(true);
+        agent.isStopped = true;
+        gameObject.SetActive(false);
+    }
 
     private void OnTriggerEnter(Collider other)
     {

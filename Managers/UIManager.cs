@@ -9,23 +9,23 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance = null;
 
-    public GameObject levelEndObject;
-    public GameObject gameOverObject;
+    //public GameObject levelEndObject;
+    //public GameObject gameOverObject;
 
-    public string[] skeletonText = new string[4];
+    //public string[] skeletonText = new string[4];
 
+    //[SerializeField]
+    //private GameObject dialoguePanel;
+    //[SerializeField]
+    //private GameObject dialogueText;
+    //[SerializeField]
+    //private GameObject playerHealth;
     [SerializeField]
-    private GameObject dialoguePanel;
-    [SerializeField]
-    public GameObject dialogueText;
-    [SerializeField]
-    private GameObject playerHealth;
+    private Text memberCountText;
 
-    private string dialogueType;
-    private int dialogueIndex = 0;
-    private int speedMulti = 0;
-
-    private Rigidbody playerRb;
+    //private string dialogueType;
+    //private int dialogueIndex = 0;
+    //private int speedMulti = 0;
 
 	// Use this for initialization
 	void Start()
@@ -35,39 +35,38 @@ public class UIManager : MonoBehaviour
         else if (instance != this)
             Destroy(gameObject);
 
-        playerRb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
 	}
 
-    public void DisplayDialoguePanel(string type)
-    {
-        dialogueType = type;
-        playerHealth.SetActive(false);
-        dialoguePanel.SetActive(true);
-    }
+    //public void DisplayDialoguePanel(string type)
+    //{
+    //    dialogueType = type;
+    //    playerHealth.SetActive(false);
+    //    dialoguePanel.SetActive(true);
+    //}
 
     private void Update()
     {
-
+        memberCountText.text = "Cult Members: " + Recruit.cultMemberCount;
     }
 
-    void NextDialogueLine(string nextLine)
-    {
-        dialogueText.GetComponent<Text>().text = nextLine;
-    }
+    //void NextDialogueLine(string nextLine)
+    //{
+    //    dialogueText.GetComponent<Text>().text = nextLine;
+    //}
 
-    void ClearDialoguePanel()
-    {
-        playerHealth.SetActive(true);
-        dialoguePanel.SetActive(false);
-    }
+    //void ClearDialoguePanel()
+    //{
+    //    playerHealth.SetActive(true);
+    //    dialoguePanel.SetActive(false);
+    //}
 
-    public void OnLevelEnd()
-    {
-        levelEndObject.SetActive(true);
-    }
+    //public void OnLevelEnd()
+    //{
+    //    levelEndObject.SetActive(true);
+    //}
 
-    public void OnGameOver()
-    {
-        gameOverObject.SetActive(true);
-    }
+    //public void OnGameOver()
+    //{
+    //    gameOverObject.SetActive(true);
+    //}
 }
