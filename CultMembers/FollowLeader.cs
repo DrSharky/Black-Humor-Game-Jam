@@ -18,6 +18,8 @@ public class FollowLeader : MonoBehaviour
 	void Start ()
     {
         agent = GetComponent<NavMeshAgent>();
+        if (leader == null)
+            leader = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	void Update ()

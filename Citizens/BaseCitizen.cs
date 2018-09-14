@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class BaseCitizen : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject player;
+    public GameObject player;
     [SerializeField]
     private NavMeshAgent agent;
     [SerializeField]
@@ -61,15 +60,16 @@ public class BaseCitizen : MonoBehaviour
                 ChangeCostume();
                 EventManager.TriggerEvent("AddRecruit");
                 lookAtPlayer = false;
+                Destroy(gameObject);
             }
         }
 	}
 
     void ChangeCostume()
     {
-        cultCostume.SetActive(true);
+        GameObject cultMember = Instantiate(cultCostume, transform.position, transform.rotation);
+        cultMember.SetActive(true);
         agent.isStopped = true;
-        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)

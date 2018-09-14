@@ -33,11 +33,6 @@ public class GameManager : MonoBehaviour
             uiManager = GetComponent<UIManager>();
     }
 
-    private void AddLevelCount()
-    {
-        levelCount++;
-    }
-
     private void Awake()
     {
         Application.targetFrameRate = 60;
