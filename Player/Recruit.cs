@@ -23,17 +23,19 @@ public class Recruit : MonoBehaviour
 	
 	void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !holdingKey)
+        if (!(TimeManager.countDownTime >= 0))
         {
-            EventManager.TriggerEvent("StartRecruiting");
-            holdingKey = true;
+            if (Input.GetKeyDown(KeyCode.E) && !holdingKey)
+            {
+                EventManager.TriggerEvent("StartRecruiting");
+                holdingKey = true;
+            }
+            else if (Input.GetKeyUp(KeyCode.E))
+            {
+                EventManager.TriggerEvent("StopRecruiting");
+                holdingKey = false;
+            }
         }
-        else if(Input.GetKeyUp(KeyCode.E))
-        {
-            EventManager.TriggerEvent("StopRecruiting");
-            holdingKey = false;
-        }
-
 	}
 
     void AddRecruit()

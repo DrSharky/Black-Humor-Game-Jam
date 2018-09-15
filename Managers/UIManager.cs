@@ -4,28 +4,60 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance = null;
 
-    //public GameObject levelEndObject;
-    //public GameObject gameOverObject;
-
-    //public string[] skeletonText = new string[4];
-
-    //[SerializeField]
-    //private GameObject dialoguePanel;
-    //[SerializeField]
-    //private GameObject dialogueText;
-    //[SerializeField]
-    //private GameObject playerHealth;
+    [SerializeField]
+    private GameObject gameWinObject;
+    [SerializeField]
+    private Text timerText;
     [SerializeField]
     private Text memberCountText;
+    [SerializeField]
+    private Text countDownText;
+    [SerializeField]
+    private GameObject pauseMenu;
+    [SerializeField]
+    private GameObject gameOverPanel;
 
-    //private string dialogueType;
-    //private int dialogueIndex = 0;
-    //private int speedMulti = 0;
+    private Action timeUpListener;
+    private Action gameWinListener;
+    private Action countDownStartListener;
+    private bool dontTriggerTwice = true;
+
+    void Awake()
+    {
+        gameWinObject.SetActive(false);
+        gameWinListener = new Action(GameWin);
+        countDownStartListener = new Action(CountDownStart);
+    }
+
+    void CountDownStart()
+    {
+        countDownText.transform.parent.gameObject.SetActive(true);
+        timerText.transform.parent.gameObject.SetActive(true);
+        memberCountText.transform.parent.gameObject.SetActive(true);
+    }
+
+    void GameWin()
+    {
+        StartCoroutine(WinCoroutine());
+    }
+
+    IEnumerator WinCoroutine()
+    {
+        if (Mathf.Round(TimeManager.timer) > 0)
+            gameWinObject.GetComponent<Text>().text = "MAX FOLLOWERS!!!";
+        else
+            gameWinObject.GetComponent<Text>().text = "TIME UP!!!";
+        gameWinObject.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        //WAIT FOR ANIMATION TO PLAY
+        gameOverPanel.SetActive(true);
+    }
 
 	// Use this for initialization
 	void Start()
@@ -35,38 +67,27 @@ public class UIManager : MonoBehaviour
         else if (instance != this)
             Destroy(gameObject);
 
-	}
-
-    //public void DisplayDialoguePanel(string type)
-    //{
-    //    dialogueType = type;
-    //    playerHealth.SetActive(false);
-    //    dialoguePanel.SetActive(true);
-    //}
-
-    private void Update()
-    {
-        memberCountText.text = "Cult Members: " + Recruit.cultMemberCount;
+        EventManager.StartListening("WinEvent", gameWinListener);
+        EventManager.StartListening("TimeUp", gameWinListener);
+        EventManager.StartListening("CountDownStart", countDownStartListener);
     }
 
-    //void NextDialogueLine(string nextLine)
-    //{
-    //    dialogueText.GetComponent<Text>().text = nextLine;
-    //}
+    void Update()
+    {
+        memberCountText.text = "Followers: " + Recruit.cultMemberCount;
+        timerText.text = Math.Round(TimeManager.timer, 1).ToString("0.0");
 
-    //void ClearDialoguePanel()
-    //{
-    //    playerHealth.SetActive(true);
-    //    dialoguePanel.SetActive(false);
-    //}
-
-    //public void OnLevelEnd()
-    //{
-    //    levelEndObject.SetActive(true);
-    //}
-
-    //public void OnGameOver()
-    //{
-    //    gameOverObject.SetActive(true);
-    //}
+        if (Mathf.Round(TimeManager.countDownTime) == 0)
+        {
+            countDownText.text = "GO!";
+        }
+        else if (TimeManager.countDownTime > 0)
+            countDownText.text = Mathf.Round(TimeManager.countDownTime).ToString();
+        if (Mathf.Round(TimeManager.countDownTime) <= -1 && dontTriggerTwice)
+        {
+            countDownText.transform.parent.gameObject.SetActive(false);
+            EventManager.TriggerEvent("PlayerMove");
+            dontTriggerTwice = false;
+        }
+    }
 }

@@ -35,10 +35,8 @@ public class WanderingAI : MonoBehaviour
         anim.StopPlayback();
         forwardAmt = 0.0f;
         turnAmt = 0.0f;
-        UpdateAnimator(transform.position);
         agent.SetDestination(transform.position);
         agent.isStopped = true;
-        //rb.constraints = RigidbodyConstraints.FreezeAll;
         agent.enabled = false;
         endState = true;
         anim.enabled = false;
@@ -49,8 +47,6 @@ public class WanderingAI : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        //rb = GetComponent<Rigidbody>();
-        //StartCoroutine(WaitForSpawn());
         wanderListener = new Action(() => { frozen = !frozen; });
     }
 
@@ -67,20 +63,8 @@ public class WanderingAI : MonoBehaviour
         EventManager.StartListening("ToggleWander" + gameObject.GetInstanceID(), wanderListener);
     }
 
-    private IEnumerator WaitForSpawn()
-    {
-        //rb.constraints = RigidbodyConstraints.FreezeAll;
-        yield return new WaitForSeconds(1.0f);
-        //rb.constraints = RigidbodyConstraints.FreezeRotation;
-        agent.enabled = true;
-        frozen = false;
-    }
-
     private void FixedUpdate()
     {
-        if(frozen || endState)
-            return;
-
         timer += Time.deltaTime;
 
         if (timer >= wanderTimer)
@@ -89,18 +73,12 @@ public class WanderingAI : MonoBehaviour
 
             agent.SetDestination(newPos);
             timer = 0;
+            wanderTimer = UnityEngine.Random.Range(1.0f, 5.0f);
 
         }
 
         if (agent.remainingDistance > agent.stoppingDistance)
             Move(agent.desiredVelocity);
-    }
-
-    void UpdateAnimator(Vector3 move)
-    {
-        // update the animator parameters
-        anim.SetFloat("Forward", forwardAmt);
-        anim.SetFloat("Turn", turnAmt);
     }
 
     public void Move(Vector3 move)
@@ -117,9 +95,6 @@ public class WanderingAI : MonoBehaviour
         forwardAmt = move.z * 0.5f;
 
         ApplyExtraTurnRotation();
-
-        // send input and other state parameters to the animator
-        UpdateAnimator(move);
     }
 
 
@@ -140,21 +115,8 @@ public class WanderingAI : MonoBehaviour
         return navHit.position;
     }
 
-    public void PlayerIsDead()
-    {
-        endState = true;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.tag == "Player")
-        {
-            Color debugColor = Color.green;
-            foreach (ContactPoint contact in collision.contacts)
-            {
-                Debug.DrawRay(contact.point, contact.normal, debugColor, 5);
-            }
-            //rb.velocity = new Vector3(0, 0, 0);
-        }
-    }
+    //public void PlayerIsDead()
+    //{
+    //    endState = true;
+    //}
 }
