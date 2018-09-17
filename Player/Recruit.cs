@@ -25,12 +25,12 @@ public class Recruit : MonoBehaviour
     {
         if (!(TimeManager.countDownTime >= 0))
         {
-            if (Input.GetKeyDown(KeyCode.E) && !holdingKey)
+            if (Input.GetKeyDown(KeyCode.Space) && !holdingKey)
             {
                 EventManager.TriggerEvent("StartRecruiting");
                 holdingKey = true;
             }
-            else if (Input.GetKeyUp(KeyCode.E))
+            else if (Input.GetKeyUp(KeyCode.Space))
             {
                 EventManager.TriggerEvent("StopRecruiting");
                 holdingKey = false;

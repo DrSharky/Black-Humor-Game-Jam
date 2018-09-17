@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class FollowLeader : MonoBehaviour
 {
@@ -14,9 +15,31 @@ public class FollowLeader : MonoBehaviour
     private float forwardAmt;
     private NavMeshAgent agent;
     private Vector3 leaderPos;
+    private Action endingListener;
+
+    [SerializeField]
+    private Animator anim;
+
+    void Awake()
+    {
+        endingListener = new Action(AnimateEnding);
+    }
+
+    void AnimateEnding()
+    {
+        StartCoroutine(PlayAnimationDelay());
+    }
+
+    IEnumerator PlayAnimationDelay()
+    {
+        yield return new WaitForSeconds(2.0f);
+        anim.SetTrigger("ending");
+    }
 
 	void Start ()
     {
+        EventManager.StartListening("TimeUp", endingListener);
+        EventManager.StartListening("WinEvent", endingListener);
         agent = GetComponent<NavMeshAgent>();
         if (leader == null)
             leader = GameObject.FindGameObjectWithTag("Player");

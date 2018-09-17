@@ -10,6 +10,9 @@ public class CitizenSpawner : MonoBehaviour
     GameObject player;
     [SerializeField]
     GameObject citizen;
+
+    [SerializeField]
+    GameObject[] citizenArray = new GameObject[10];
     [SerializeField]
     GameObject wanderCitizen;
 
@@ -38,8 +41,9 @@ public class CitizenSpawner : MonoBehaviour
 
         for(int k = 0; k < 35; k++)
         {
-            Vector3 wanderSpawn = GenerateCrowdPoint(20.0f, 175.0f, 20.0f, 175.0f);
-            GameObject newWanderCit = Instantiate(wanderCitizen, wanderSpawn, transform.rotation);
+            Vector3 wanderSpawn = GenerateCrowdPoint(20.0f, 150.0f, 20.0f, 160.0f);
+            GameObject citizenToSpawn = citizenArray[Mathf.RoundToInt((UnityEngine.Random.Range(0, 6)))];
+            GameObject newWanderCit = Instantiate(citizenToSpawn, wanderSpawn, transform.rotation);
             newWanderCit.GetComponentInChildren<BaseCitizen>().player = player;
             newWanderCit.GetComponentInChildren<WanderingAI>().player = player;
         }

@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
 
     private int citizensRemaining;
     private Action addRecruitListener;
-    private Action gameOverListener;
     private bool populateWait = false;
 
     void Awake()
@@ -36,8 +35,6 @@ public class GameManager : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player");
 
         EventManager.StartListening("AddRecruit", addRecruitListener);
-        EventManager.StartListening("TimeUp", gameOverListener);
-        EventManager.StartListening("GameOver", gameOverListener);
 
         StartCoroutine(WaitForSpawn());
         EventManager.TriggerEvent("StartCountdown");
@@ -54,9 +51,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
 	{
-        if (Input.GetKeyDown(KeyCode.T))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
         if (citizensRemaining == 0 && populateWait)
         {
             EventManager.TriggerEvent("WinEvent");
