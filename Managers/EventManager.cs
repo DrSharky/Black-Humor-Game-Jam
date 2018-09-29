@@ -19,9 +19,13 @@ public class EventManager : MonoBehaviour
                 eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
 
                 if (!eventManager)
+                {
                     Debug.LogError("Needs 1 active EventManager script on a GO in your scene!");
+                }
                 else
+                {
                     eventManager.Init();
+                }
             }
             return eventManager;
         }
@@ -30,7 +34,9 @@ public class EventManager : MonoBehaviour
     void Init()
     {
         if (dictByType == null)
+        {
             dictByType = new DictionaryByType();
+        }
     }
 
     public static void StartListening<T>(string eventName, Action<T> listener)
@@ -65,7 +71,11 @@ public class EventManager : MonoBehaviour
 
     public static void StopListening<T>(string eventName, Action<T> listener)
     {
-        if (eventManager == null) return;
+        if (eventManager == null) 
+        {
+            return;
+        }
+        
         Action<T> thisEvent;
         if (instance.dictByType.TryGet(eventName, out thisEvent))
         {
