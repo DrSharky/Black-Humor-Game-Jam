@@ -50,9 +50,13 @@ public class UIManager : MonoBehaviour
     IEnumerator WinCoroutine()
     {
         if (Mathf.Round(TimeManager.timer) > 0)
+        {
             gameWinObject.GetComponent<Text>().text = "MAX FOLLOWERS!!!";
+        }
         else
+        {
             gameWinObject.GetComponent<Text>().text = "TIME UP!!!";
+        }
         gameWinObject.SetActive(true);
         yield return new WaitForSeconds(3.0f);
         //WAIT FOR ANIMATION TO PLAY
@@ -62,10 +66,14 @@ public class UIManager : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-        if (instance == null)
+        if (instance == null) 
+        {
             instance = this;
+        }
         else if (instance != this)
+        {
             Destroy(gameObject);
+        }
 
         EventManager.StartListening("WinEvent", gameWinListener);
         EventManager.StartListening("TimeUp", gameWinListener);
@@ -82,7 +90,9 @@ public class UIManager : MonoBehaviour
             countDownText.text = "GO!";
         }
         else if (TimeManager.countDownTime > 0)
+        {
             countDownText.text = Mathf.Round(TimeManager.countDownTime).ToString();
+        }
         if (Mathf.Round(TimeManager.countDownTime) <= -1 && dontTriggerTwice)
         {
             countDownText.transform.parent.gameObject.SetActive(false);
