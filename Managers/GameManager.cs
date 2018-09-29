@@ -24,15 +24,23 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         if (instance == null)
+        {
             instance = this;
+        }
         else if (instance != this)
+        {
             Destroy(gameObject);
+        }
 
         if (uiManager == null)
+        {
             uiManager = GetComponent<UIManager>();
+        }
 
         if (player == null)
+        {
             player = GameObject.FindGameObjectWithTag("Player");
+        }
 
         EventManager.StartListening("AddRecruit", addRecruitListener);
 
@@ -56,7 +64,5 @@ public class GameManager : MonoBehaviour
             EventManager.TriggerEvent("WinEvent");
             citizensRemaining = -1;
         }
-
-
 	}
 }
