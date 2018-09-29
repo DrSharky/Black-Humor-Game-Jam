@@ -31,9 +31,13 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         if (instance == null)
+        {
             instance = this;
+        }
         else if (instance != this)
+        {
             Destroy(gameObject);
+        }
 
         EventManager.StartListening("AddRecruit", recruitListener);
         EventManager.StartListening("WinEvent", winEventListener);
@@ -43,10 +47,14 @@ public class TimeManager : MonoBehaviour
     void Update ()
     {
         if (!countStart)
+        {
             countDownTime -= Time.deltaTime;
+        }
 
         if(countStart && !stopTime)
+        {
             timer -= Time.deltaTime;
+        }
 
         if (timer <= 0)
         {
@@ -55,6 +63,8 @@ public class TimeManager : MonoBehaviour
         }
 
         if (countDownTime <= -1)
+        {
             countStart = true;
+        }
 	}
 }
