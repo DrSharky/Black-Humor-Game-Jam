@@ -42,7 +42,9 @@ public class FollowLeader : MonoBehaviour
         EventManager.StartListening("WinEvent", endingListener);
         agent = GetComponent<NavMeshAgent>();
         if (leader == null)
+        {
             leader = GameObject.FindGameObjectWithTag("Player");
+        }
 	}
 	
 	void Update ()
