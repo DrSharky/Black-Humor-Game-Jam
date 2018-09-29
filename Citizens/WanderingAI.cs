@@ -78,7 +78,9 @@ public class WanderingAI : MonoBehaviour
         }
 
         if (agent.remainingDistance > agent.stoppingDistance)
+        {
             Move(agent.desiredVelocity);
+        }
     }
 
     public void Move(Vector3 move)
